@@ -16,21 +16,26 @@ pipeline {
                 sh 'npm test'
             }
         }
-        stage('Smoke Test App') {
+        stage('Deploy to Production') {
             steps {
-                // Run server
+                // PM2 start app
                 sh '''
-                    nohup npm start > app.log 2>&1 &
-                    sleep 3
-                    curl -I http://localhost:3000/health
-                    pkill -f "node server.js"
+                    pm2 describe tic-tac-toe-app > /dev/null
+                    if [ $? -eq 0 ]; then
+                        pm2 reload tic-tac-toe-app --update-env
+                    else
+                        pm2 start ecosystem.config.js
+                    fi
                 '''
             }
         }
     }
     post {
         success {
-            echo 'Pipeline passed successfully without Docker!'
+            echo 'Pipeline passed & deployed successfully with PM2!'
+        }
+        failure {
+            echo 'Pipeline failed. Deployment aborted.'
         }
     }
 }
