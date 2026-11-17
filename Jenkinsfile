@@ -16,12 +16,10 @@ pipeline {
                 sh 'npm test'
             }
         }
-        stage('Deploy to Production') {
+	stage('Deploy to Production') {
             steps {
-                // PM2 start app
                 sh '''
-                    pm2 describe tic-tac-toe-app > /dev/null
-                    if [ $? -eq 0 ]; then
+                    if pm2 describe tic-tac-toe-app > /dev/null 2>&1; then
                         pm2 reload tic-tac-toe-app --update-env
                     else
                         pm2 start ecosystem.config.js
