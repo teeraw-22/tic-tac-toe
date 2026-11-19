@@ -30,6 +30,18 @@ pipeline {
                 '''
             }
         }
+	stage('Smoke Test') {
+            steps {
+                sh '''
+                    # Wait 3 seconds for container app to boot up
+                    sleep 3
+                    
+                    # Check HTTP status code (must return 200 OK)
+                    curl -f http://localhost:3000 || exit 1
+                    echo "Smoke test passed! Application is up and responding."
+                '''
+            }
+        }
     }
     post {
         success {
