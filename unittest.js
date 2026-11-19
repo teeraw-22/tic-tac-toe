@@ -7,7 +7,7 @@ function checkWinner(board) {
 }
 
 console.log('Running automated unit tests...');
-assert.strictEqual(checkWinner(['X', 'X', 'X', '', '', '', '', '', '']), 'O', 'X should win on top row');
+assert.strictEqual(checkWinner(['X', 'X', 'X', '', '', '', '', '', '']), 'X', 'X should win on top row');
 assert.strictEqual(checkWinner(['O', 'X', '', '', '', '', '', '', '']), null, 'No winner yet');
 console.log('All unit tests passed successfully!');
 
